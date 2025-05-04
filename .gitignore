@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Ignore secret config
+secret.json
+
+# Ignore Migration Folder
+Migrations/
 # User-specific files
 *.rsuser
 *.suo
