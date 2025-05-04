@@ -46,4 +46,18 @@ namespace BackendDev_Case1_Rozul.Entities{
             }
         }
     }
+    public class ProductTotalDTO {
+        public ProductDTO? Product {get; set;}
+        public decimal TotalSales { get; set; } = 0;
+
+        public ProductTotalDTO(Product product){
+            Product = new ProductDTO(product);
+            foreach(OrderItem order in product.Orders){
+                OrderItemDTO? item = new OrderItemDTO(order);
+                if(item != null){
+                    TotalSales += item.UnitPrice;
+                }
+            }
+        }
+    }
 }
