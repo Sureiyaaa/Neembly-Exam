@@ -25,14 +25,11 @@ namespace BackendDev_Case1_Rozul.Entities{
 
     public class CategoryDTO {
         public int CategoryID { get; set; }
-        public ProductDTO? Product { get; set; }
         public CategoryTypeDTO? Category { get; set; }
         
         public CategoryDTO(Category category){
             CategoryID = category.CategoryID;
-
-            // Null safety checks for nullable data
-            Product = category.Product != null ? new ProductDTO(category.Product) : null;
+            
             Category = category.CategoryType != null ? new CategoryTypeDTO(category.CategoryType) : null;
         }
     }
