@@ -80,6 +80,97 @@ namespace BackendDev_Case1_Rozul.Controllers
         }
         #endregion
 
+        #region  GetProductsByCategory
+        [HttpGet("products/categories/{id}")]
+        public IActionResult GetProductsByCategory(int id)
+        {
+            using(var context = new ApplicationDbContext()){
+                try{
+                    List<ProductDTO> products = context.Products
+                                            .AsNoTracking()
+                                            .Where(product => 
+                                                product.Categories.Any(category => category.CategoryTypeID == id)
+                                            )
+                                            .Include(p => p.Categories)
+                                                .ThenInclude(c => c.CategoryType)
+                                            .Select(p => new ProductDTO(p)).ToList();
+
+                    return Ok(
+                        new {
+                            status = 200,
+                            message = "Retrieved category products successfully.",
+                            body = new 
+                            {
+                                products
+                            }
+                        }
+                    );
+                }catch(Exception ex){
+                    return ErrorStatusCode(ex);
+                }
+            }
+        }
+        #endregion
+
+        #region  GetTotalProductsSales
+        [HttpGet("products/totalsales")]
+        public IActionResult GetTotalProductsSales()
+        {
+            using(var context = new ApplicationDbContext()){
+                try{
+                    List<ProductTotalDTO> products = context.Products
+                                            .AsNoTracking()
+                                            .Include(p => p.Categories)
+                                                .ThenInclude(c => c.CategoryType)
+                                            .Include(o => o.Orders)
+                                            .Select(p => new ProductTotalDTO(p)).ToList();
+
+                    return Ok(
+                        new {
+                            status = 200,
+                            message = "Retrieved total sales of products successfully.",
+                            body = new 
+                            {
+                                products
+                            }
+                        }
+                    );
+                }catch(Exception ex){
+                    return ErrorStatusCode(ex);
+                }
+            }
+        }
+        #endregion
+        #region  GetTopProductSales
+        [HttpGet("products/topsales")]
+        public IActionResult GetTopProductSales()
+        {
+            using(var context = new ApplicationDbContext()){
+                try{
+                    List<ProductTotalDTO> products = context.Products
+                                            .AsNoTracking()
+                                            .Include(p => p.Categories)
+                                                .ThenInclude(c => c.CategoryType)
+                                            .Include(o => o.Orders)
+                                            .Select(p => new ProductTotalDTO(p))
+                                            .Take(5).ToList().OrderByDescending(order => order.TotalSales).ToList();
+
+                    return Ok(
+                        new {
+                            status = 200,
+                            message = "Retrieved total sales of products successfully.",
+                            body = new 
+                            {
+                                products
+                            }
+                        }
+                    );
+                }catch(Exception ex){
+                    return ErrorStatusCode(ex);
+                }
+            }
+        }
+        #endregion
         #region CreateProduct
         [HttpPost("products")]
         public async Task<IActionResult> CreateProduct([FromBody] ProductPostRequest request)
@@ -197,7 +288,6 @@ namespace BackendDev_Case1_Rozul.Controllers
                     });
 
                 }catch(Exception ex){
-                    Console.WriteLine(ex);
                     return ErrorStatusCode(ex);
                 }
             }
