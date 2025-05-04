@@ -22,7 +22,6 @@ namespace BackendDev_Case1_Rozul.Models
         [Required(ErrorMessage = "Customer Name is required")]
         public string? CustomerName { get; set; } 
         [Required(ErrorMessage = "Order items are required")]
-        [MinLength(1, ErrorMessage = "At least one order item is required")]
         public List<OrderItemPostRequest>? OrderItems { get; set; }
     }
 
