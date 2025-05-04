@@ -19,7 +19,7 @@ namespace BackendDev_Case1_Rozul.Entities{
         [Required]
         public required int ProductID { get; set;} 
 
-        [ForeignKey("OrderID")] 
+        [ForeignKey("ProductID")] 
         public Product? Product { get; set; }
 
         [Required]
@@ -33,7 +33,7 @@ namespace BackendDev_Case1_Rozul.Entities{
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public OrderItemDTO(OrderItem order){
-            OrderItemID = order.OrderID;
+            OrderItemID = order.OrderItemID;
             Quantity = order.Quantity;
 
             // Null safety checks for nullable data
